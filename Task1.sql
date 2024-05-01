@@ -137,6 +137,8 @@ Update Accounts set balance=0 where account_id=109;
 		--doubt
 --10. Write a SQL query to Calculate the average daily balance for each account over a specified period.
 		--doubt
+		select * from accounts
+		select * from transactions
 --11. Calculate the total balance for each account type.
 		select sum(balance)as total_balance,account_type  from accounts group by account_type
 --12. Identify accounts with the highest number of transactions order by descending order.

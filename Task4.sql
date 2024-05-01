@@ -1,13 +1,13 @@
 --Tasks 4: Subquery and its type:
 --1. Retrieve the customer(s) with the highest account balance.
 		--insert into Accounts values('114','8','current','300000')
-		--step-1:
+		
+--2. Calculate the average account balance for customers who have more than one account.
+		--select avg(balance),customer_id from accounts group by customer_id,balance having count(customer_id)>1;
+		--doubt--step-1:
 		select customer_id from accounts where balance=(select max(balance) from accounts);
 		--step-2:
 		select * from customers where customer_id in(select customer_id from accounts where balance=(select max(balance) from accounts));
---2. Calculate the average account balance for customers who have more than one account.
-		--select avg(balance),customer_id from accounts group by customer_id,balance having count(customer_id)>1;
-		--doubt
 		select customer_id from accounts group by customer_id having count(customer_id)>1;
 		select avg(balance),customer_id from accounts where customer_id in(select customer_id from accounts group by customer_id having count(customer_id)>1) group by customer_id;
 --3. Retrieve accounts with transactions whose amounts exceed the average transaction amount.
