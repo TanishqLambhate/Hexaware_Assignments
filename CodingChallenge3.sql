@@ -99,6 +99,11 @@ VALUES
 
 select * from payment
 
+	INSERT INTO Lease (leaseID, vehicleID, customerID, startDate, endDate, type)
+VALUES
+(11, 1, 2, '2023-01-01', '2024-05-25', 'Daily'),
+(12, 2, 5, '2023-01-01', '2023-05-25', 'Daily')
+
 --1. Update the daily rate for a Mercedes car to 68.
 	update Vehicle set dailyRate=68 where make='Mercedes';
 	
@@ -152,3 +157,4 @@ select * from payment
 	order by totalpayments desc offset 0 rows fetch next 1 row only 
 --18. List All Cars with Their Current Lease Information
 	select v.*,l.* from Vehicle as v left join lease as l on v.vehicleID=l.vehicleID and l.endDate>=GETDATE()
+
