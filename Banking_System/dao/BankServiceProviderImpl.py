@@ -1,10 +1,11 @@
+#Task 13
 from .CustomerServiceProviderImpl import CustomerServiceProviderImpl
 from .IBankServiceProvider import IBankServiceProvider
 from entity.Account import Account
 from entity.CurrentAccount import CurrentAccount
 from entity.SavingsAccount import SavingsAccount
 from entity.ZeroBalanceAccount import ZeroBalanceAccount
-
+from typing import List,Dict,Set
 
 
 from exceptions import InsufficientFundException, InvalidAccountException, OverDraftLimitExcededException
@@ -15,6 +16,9 @@ class BankServiceProviderImpl:
         self.branchName = branchName
         self.branchAddress = branchAddress
         self.accountList = []
+        # self.accounts: Dict[int, Account] = {}
+        # self.accounts: Set[Account] = set()
+        # self.accounts: List[Account] = []
         self.account_counter = 1001
 
     def generate_account_number(self):
