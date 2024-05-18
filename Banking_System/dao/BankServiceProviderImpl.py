@@ -5,31 +5,72 @@ from entity.CurrentAccount import CurrentAccount
 from entity.SavingsAccount import SavingsAccount
 from entity.ZeroBalanceAccount import ZeroBalanceAccount
 
-class BankServiceProviderImpl(CustomerServiceProviderImpl, IBankServiceProvider,Account):
-    def __init__(self, branch_name, branch_address):
-        super().__init__()
-        self.branch_name = branch_name
-        self.branch_address = branch_address
+
+
+from exceptions import InsufficientFundException, InvalidAccountException, OverDraftLimitExcededException
+
+
+class BankServiceProviderImpl:
+    def __init__(self, branchName, branchAddress):
+        self.branchName = branchName
+        self.branchAddress = branchAddress
+        self.accountList = []
+        self.account_counter = 1001
+
+    def generate_account_number(self):
+        accNo = self.account_counter
+        self.account_counter += 1
+        return accNo
 
     def create_account(self, customer, accNo, accType, balance):
         if accType == "Savings":
-            account = SavingsAccount(customer, interest_rate=0.05, account_balance=balance)
+            account = SavingsAccount(accNo, customer, balance)
         elif accType == "Current":
-            account = CurrentAccount(customer, overdraft_limit=1000, account_balance=balance)
+            account = CurrentAccount(accNo, customer, balance, overdraft_limit=1000)
         elif accType == "ZeroBalance":
-            account = ZeroBalanceAccount(customer)
+            account = ZeroBalanceAccount(accNo, customer)
         else:
-            print("Invalid account type.")
-            return None
-        
-        self.accounts[accNo] = account
+            raise ValueError("Invalid account type")
+        self.accountList.append(account)
         return account
-    
-    def list_accounts(self):
-        return list(self.accounts.values())
-    
-    def calculate_interest(self):
-        for acc in self.accounts.values():
-            if isinstance(acc, SavingsAccount):
-                interest = acc.account_balance * acc.interest_rate
-                print(f"Interest for account {acc.account_number}: {interest}")
+
+    def get_account_balance(self, accNo):
+        account = self.find_account_by_number(accNo)
+        return account.balance
+
+    def deposit(self, accNo, amount):
+        account = self.find_account_by_number(accNo)
+        account.balance += amount
+        return account.balance
+
+    def withdraw(self, accNo, amount):
+        account = self.find_account_by_number(accNo)
+        if isinstance(account, SavingsAccount) and (account.balance - amount) < 500:
+            raise InsufficientFundException("Savings account must maintain a minimum balance of 500")
+        if isinstance(account, CurrentAccount) and (account.balance - amount) < -account.overdraft_limit:
+            raise OverDraftLimitExcededException()
+        if account.balance < amount:
+            raise InsufficientFundException()
+        account.balance -= amount
+        return account.balance
+
+    def transfer(self, from_accNo, to_accNo, amount):
+        from_account = self.find_account_by_number(from_accNo)
+        to_account = self.find_account_by_number(to_accNo)
+        if from_account.balance < amount:
+            raise InsufficientFundException()
+        from_account.balance -= amount
+        to_account.balance += amount
+
+    def getAccountDetails(self, accNo):
+        account = self.find_account_by_number(accNo)
+        return account
+
+    def listAccounts(self):
+        return self.accountList
+
+    def find_account_by_number(self, accNo):
+        for account in self.accountList:
+            if account.accNo == accNo:
+                return account
+        raise InvalidAccountException()
