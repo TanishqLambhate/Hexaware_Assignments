@@ -1,9 +1,9 @@
 from .CustomerServiceProviderImpl import CustomerServiceProviderImpl
 from .IBankServiceProvider import IBankServiceProvider
-from bean.Account import Account
-from bean.CurrentAccount import CurrentAccount
-from bean.SavingsAccount import SavingsAccount
-from bean.ZeroBalanceAccount import ZeroBalanceAccount
+from entity.Account import Account
+from entity.CurrentAccount import CurrentAccount
+from entity.SavingsAccount import SavingsAccount
+from entity.ZeroBalanceAccount import ZeroBalanceAccount
 
 class BankServiceProviderImpl(CustomerServiceProviderImpl, IBankServiceProvider,Account):
     def __init__(self, branch_name, branch_address):

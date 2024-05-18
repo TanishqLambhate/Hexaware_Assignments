@@ -266,7 +266,7 @@ class Account:
         return interest_amount
 
 
-# Example usage:
+
 account1 = Account("A001", "Savings", 1000.00)
 account1.print_account_info()  # Print initial account info
 

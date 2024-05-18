@@ -1,4 +1,4 @@
-from bean.Account import Account
+from entity.Account import Account
 
 class CurrentAccount(Account):
     def __init__(self, customer, overdraft_limit, account_balance):

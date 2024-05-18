@@ -1,4 +1,4 @@
-from service.ICustomerServiceProvider import ICustomerServiceProvider
+from dao.ICustomerServiceProvider import ICustomerServiceProvider
 
 class CustomerServiceProviderImpl(ICustomerServiceProvider):
     def __init__(self):
